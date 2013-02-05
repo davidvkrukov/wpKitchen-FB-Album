@@ -261,6 +261,7 @@ class WP_Kitchen{
 	public function _filterContent($init){
 		$init['init_instance_callback']='[filterContentAjax][0]';
 		$init['onchange_callback']='[filterContentAjax][0]';
+		$init['execcommand_callback']='[filterContentAjax][0]';
 		return $init;
 	}
 	
