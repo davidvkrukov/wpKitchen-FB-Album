@@ -29,12 +29,6 @@ var filterContentAjax=function(inst){
 		});
 		img+='</ul>'
 		jQuery('#wpk_metabox_container').html(jQuery(img));
-		/*jQuery('.wpk_fb_icon_row a[id^=delete_]').unbind('click').bind('click',function(){
-			var id=parseInt(jQuery(this).attr('id').replace('delete_',''));
-			jQuery.post(ajaxurl,{action:'delete_fb_item_action',id:id},function(response){
-				filterContentAjax(inst);
-			});
-		});*/
 		jQuery('#titlewrap input[type=text]').unbind('click').bind('click',function(){
 			jQuery(this).blur(function(evt){
 				filterContentAjax(inst);
