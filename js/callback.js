@@ -2,12 +2,22 @@ var filterContentAjax=function(inst){
 	<?php global $post; ?>
 	<?php if(is_object($post)): ?>
 	var arr=new Array();
+	(function($){
+		$.event.special.destroyed={
+			remove:function(o){
+				if(o.handler){
+					o.handler();
+				}
+			}
+		}
+	})(jQuery);
 	jQuery(tinyMCE.activeEditor.dom.getRoot()).find('img').each(function(){
 		var img=jQuery(this);
 		arr.push({
 			src:img.attr("src"),
 			caption:jQuery.trim(img.attr("alt"))
 		});
+		jQuery(this).bind('destroyed',function(){filterContentAjax(inst);});
 	});
 	var data={
 		action:'content_filter_action',
