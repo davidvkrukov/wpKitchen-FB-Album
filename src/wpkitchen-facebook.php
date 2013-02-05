@@ -6,6 +6,10 @@
  */
 require_once WPK_ROOT_DIR.'../lib/base_facebook.php';
 
+/**
+ * Renamed copy of standard 'Facebook' class from FB PHP SDK
+ * Changed only cookie and session keys 
+ */
 class WP_Kitchen_Facebook extends BaseFacebook{
 	const FBSS_COOKIE_NAME='wpk_fbss';
 	const FBSS_COOKIE_EXPIRE=31556926;
