@@ -1,0 +1,35 @@
+.wpk_fb_icon_row {
+	height:50px;
+}
+
+.wpk_fb_icon_checkbox {
+	float:left;
+	width:15px;
+	height:15px;
+	margin:17px 10px 0px !important;
+}
+
+.wpk_fb_icon_checkbox + label {
+	float:left;
+	margin:0px 0px 0px 10px;
+	line-height:50px;
+}
+
+.wpk_fb_uploaded {
+	font-weight:bold;
+	margin:0px 0px 0px 10px;
+	line-height:50px;
+}
+
+.wpk_fb_icon {
+	float:left;
+	display:block;
+	position:relative;
+	width:48px;
+	height:48px;
+	margin:2px;
+	border-radius:10px;
+	padding:2px;
+	box-shadow:2px 2px 10px rgba(10,10,10,0.2);
+	color:#fff;
+}
