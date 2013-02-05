@@ -103,6 +103,9 @@ class WP_Kitchen{
 		register_setting('wpkfb-settings-group','wpk_fb_use_type');
 	}
 	
+	/**
+	 * Load JS abd CSS
+	 */
 	public function _loadScripts(){
 		wp_enqueue_script('jquery');
 		wp_enqueue_script('jquery-ui-core');
@@ -121,20 +124,7 @@ class WP_Kitchen{
 	}
 	
 	public function _saveSettings(){
-		
-		/*global $wpk_facebook;
-		$appId=get_option('wpk_fb_app_id',null);
-		$appSecret=get_option('wpk_fb_app_secret',null);
-		if(!is_null($appId)&&!is_null($appSecret)){
-			require WPK_ROOT_DIR.'wpkitchen-facebook.php';
-			$wpk_facebook=new WP_Kitchen_Facebook(array(
-				'appId'=>$appId,
-				'secret'=>$appSecret,
-				'cookie'=>true,
-				'fileUpload'=>true,
-				'scope'=>'user_photos,email,offline_access,publish_stream,user_birthday,user_location,user_work_history,user_about_me,user_hometown'
-			));
-		}*/
+		// TODO
 	}
 	
 	/**
@@ -200,13 +190,11 @@ class WP_Kitchen{
 	 * Add script to doing AJAX calls when editor content changed
 	 */
 	public function _filterContentScript(){
-		//if(!isset($_GET['page'])||trim($_GET['page'])!='wpkitchen-fb-album/src/wpkitchen.php'){
-			ob_start();
-			require_once WPK_ROOT_DIR.'../js/callback.js';
-			$js=ob_get_contents();
-			ob_clean();
-			echo '<script type="text/javascript" >'.$js.'</script>';
-		//}
+		ob_start();
+		require_once WPK_ROOT_DIR.'../js/callback.js';
+		$js=ob_get_contents();
+		ob_clean();
+		echo '<script type="text/javascript" >'.$js.'</script>';
 	}
 	
 	/**
