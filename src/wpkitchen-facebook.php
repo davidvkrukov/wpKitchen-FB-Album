@@ -1,6 +1,6 @@
 <?php 
 /**
- * Main plugin class
+ * Main plugin FB API class
  * 
  * @author David V. Krukov
  */
