@@ -146,7 +146,7 @@ class WP_Kitchen{
 		$appSecret=get_option('wpk_fb_app_secret',null);
 		if(!is_null($appId)&&!is_null($appSecret)){
 			global $wpk_facebook;
-			require WPK_ROOT_DIR.'wpkitchen-facebook.php';
+			require WPK_ROOT_DIR.'../lib/facebook.php';
 			$wpk_facebook=new Facebook(array(
 				'appId'=>$appId,
 				'secret'=>$appSecret,
