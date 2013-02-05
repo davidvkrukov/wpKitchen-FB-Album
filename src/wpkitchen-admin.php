@@ -11,9 +11,11 @@ class WP_Kitchen_Admin{
 	 * @var WP_Kitchen_Admin
 	 */
 	private static $__instance=null;
-	private $_access_token=null;
-	private $_userId=0;
 	
+	/**
+	 * Constructor
+	 * Register callbacks for main admin WP actions
+	 */
 	protected function __construct(){
 		add_action('admin_menu',array(&$this,'_registerMenu'));
 		add_action('admin_init',array(&$this,'_registerSettings'));
@@ -84,6 +86,7 @@ class WP_Kitchen_Admin{
 			$content=stripcslashes($_POST['content']);
 			$post_id=intval($_POST['post_id']);
 			$tmp=array();
+			// Get featured image
 			if(has_post_thumbnail($post_id)){
 				$image_id=get_post_thumbnail_id($post_id);
 				$image_url=wp_get_attachment_image_src($image_id,'full');
@@ -93,6 +96,7 @@ class WP_Kitchen_Admin{
 					'title'=>''
 				);
 			}
+			// Get gallerie images
 			preg_match('/gallery ids="([^\s]+)""/i',htmlspecialchars_decode($content),$gallery);
 			if(isset($gallery[1])){
 				$_tmp=explode(',',$gallery[1]);
@@ -105,7 +109,7 @@ class WP_Kitchen_Admin{
 					);
 				}
 			}
-			$images=array();
+			// Get all other images presented in post content
 			foreach($_POST['img'] as $img){
 				$tmp[]=array(
 					'url'=>$img['src'],
@@ -113,7 +117,9 @@ class WP_Kitchen_Admin{
 					'title'=>$img['caption']
 				);
 			}
+			// Merge all images and check for previously published
 			$meta=get_post_meta($post_id,'wpk_fb_album_meta',array());
+			$images=array();
 			foreach($tmp as $image){
 				$wh=getimagesize($image['url']);
 				if($wh[0]>1&&$wh[1]>1){
@@ -126,16 +132,6 @@ class WP_Kitchen_Admin{
 			}
 			header('Content-type: application/json');
 			echo json_encode($images);
-		}
-		die();
-	}
-	
-	public function _deleteFBItemAction(){
-		if(isset($_POST['id'])&&is_numeric($_POST['id'])){
-			global $wpk_facebook;//=WP_Kitchen_Facebook::init();
-			//$api=$wpk_facebook->getApi();
-			//var_dump($api);
-			$response=$wpk_facebook->deleteItem($_POST['id']);
 		}
 		die();
 	}
