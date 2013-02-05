@@ -1,3 +1,4 @@
+
 <?php 
 /**
  * Main plugin metabox class
@@ -9,6 +10,11 @@ if(!class_exists('WP_Kitchen_Metabox')):
 
 class WP_Kitchen_Metabox{
 	
+	/**
+	 * Save post metadata callback
+	 * 
+	 * @param integer $postId
+	 */
 	public function saveMetaData($postId){
 		if(defined('DOING_AUTOSAVE')&&DOING_AUTOSAVE) return;
 		if(!wp_is_post_revision($postId)){
@@ -45,6 +51,12 @@ class WP_Kitchen_Metabox{
 		}
 	}
 	
+	/**
+	 * Create new or get existing album on FB and return album id
+	 * 
+	 * @param string $name
+	 * @return integer
+	 */
 	protected function getAlbumId($name){
 		global $wpk_facebook;
 		$user_id=$wpk_facebook->getUser();
@@ -61,6 +73,13 @@ class WP_Kitchen_Metabox{
 		return $response['id'];
 	}
 	
+	/**
+	 * Build batch request for FB Graph API call and return response
+	 * 
+	 * @param integer $albumId
+	 * @param array $images
+	 * @return array
+	 */
 	protected function addPhotos($albumId,$images){
 		global $wpk_facebook;
 		$wpk_facebook->setFileUploadSupport(true);
