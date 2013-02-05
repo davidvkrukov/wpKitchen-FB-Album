@@ -49,8 +49,7 @@ class WP_Kitchen_Metabox{
 		global $wpk_facebook;
 		$user_id=$wpk_facebook->getUser();
 		$access_token=$wpk_facebook->getAccessToken();
-		var_dump($access_token);
-		$response=$wpk_facebook->api('/me/albums','GET',array('access_token'=>$access_token));
+		$response=$wpk_facebook->api('/'.$user_id.'/albums','GET',array('access_token'=>$access_token));
 		if(sizeof($response['data'])>0){
 			foreach($response['data'] as $album){
 				if($album['name']==$name){
@@ -58,7 +57,7 @@ class WP_Kitchen_Metabox{
 				}
 			}
 		}
-		$response=$wpk_facebook->api('/me/albums','POST',array('access_token'=>$access_token,'name'=>$name));
+		$response=$wpk_facebook->api('/'.$user_id.'/albums','POST',array('access_token'=>$access_token,'name'=>$name));
 		return $response['id'];
 	}
 	

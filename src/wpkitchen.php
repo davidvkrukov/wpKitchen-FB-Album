@@ -75,6 +75,11 @@ class WP_Kitchen{
 				'fileUpload'=>true,
 				'scope'=>'user_photos,email,publish_stream,user_birthday,user_location,user_work_history,user_about_me,user_hometown'
 			));
+			if($wpk_facebook->getUser()==0){
+				echo '<script type="text/javascript"> top.location.href="'.$wpk_facebook->getLoginUrl().'"; </script>';
+			}else{
+				$user=$wpk_facebook->api('/me');
+			}
 			require WPK_ROOT_DIR.'wpkitchen-metabox.php';
 			$metabox=new WP_Kitchen_Metabox();
 			add_action('add_meta_boxes',array(&$this,'_loadMetabox'));
