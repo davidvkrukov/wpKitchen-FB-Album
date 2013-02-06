@@ -20,16 +20,6 @@ if(!defined('WPK_ROOT_DIR')){
 	define('WPK_ROOT_DIR',dirname(__FILE__).'/src/');
 }
 
-// Load timthumb library and check for cache directory
-require_once dirname(__FILE__).'/lib/timthumb.php';
-if(!file_exists(FILE_CACHE_DIRECTORY)){
-	try{
-		mkdir(FILE_CACHE_DIRECTORY,0777);
-	}catch(Exception $e){
-		echo $e->getMessage();
-	}
-}
-
 global $wpk_facebook;
 
 // Require main plugin class
