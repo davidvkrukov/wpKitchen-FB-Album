@@ -260,7 +260,7 @@ class WP_Kitchen{
 	 */
 	public function _filterContent($init){
 		$init['init_instance_callback']='[wpk_filterContentAjax][0]';
-		$init['onchange_callback']='[wpk_filterContentAjax][0]';
+		//$init['onchange_callback']='[wpk_filterContentAjax][0]';
 		$init['handle_node_change_callback']='[wpk_checkForImage][0]'; 
 		return $init;
 	}
