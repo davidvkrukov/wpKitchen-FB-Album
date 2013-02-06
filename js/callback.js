@@ -39,7 +39,6 @@ var wpk_filterContentAjax=function(inst){
 	<?php endif ?>
 };
 
-
 var wpk_checkForImage=function(editor_id,node,undo_index,undo_levels,visual_aid,any_selection){
 	if(node.nodeName=='IMG'){
 		wpk_filterContentAjax(tinyMCE.activeEditor);
