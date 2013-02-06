@@ -1,16 +1,7 @@
-var filterContentAjax=function(inst){
+var wpk_filterContentAjax=function(inst){
 	<?php global $post; ?>
 	<?php if(is_object($post)): ?>
 	var arr=new Array();
-	(function($){
-		$.event.special.destroyed={
-			remove:function(o){
-				if(o.handler){
-					o.handler();
-				}
-			}
-		}
-	})(jQuery);
 	jQuery(tinyMCE.activeEditor.dom.getRoot()).find('img').each(function(){
 		var img=jQuery(this);
 		arr.push({
@@ -41,9 +32,16 @@ var filterContentAjax=function(inst){
 		jQuery('#wpk_metabox_container').html(jQuery(img));
 		jQuery('#titlewrap input[type=text]').unbind('click').bind('click',function(){
 			jQuery(this).blur(function(evt){
-				filterContentAjax(inst);
+				wpk_filterContentAjax(inst);
 			});
 		});
 	});
 	<?php endif ?>
+};
+
+
+var wpk_checkForImage=function(editor_id,node,undo_index,undo_levels,visual_aid,any_selection){
+	if(node.nodeName=='IMG'){
+		wpk_filterContentAjax(tinyMCE.activeEditor);
+	}
 };
