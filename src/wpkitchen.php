@@ -32,7 +32,7 @@ class WP_Kitchen{
 	 * @return WP_Kitchen
 	 */
 	public static function init(){
-		if(self::$__instance===null||!is_object($wpk_facebook)){
+		if(self::$__instance===null){
 			self::$__instance=new self();
 		}
 		return self::$__instance;
