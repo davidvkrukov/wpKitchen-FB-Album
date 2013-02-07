@@ -23,7 +23,7 @@ var wpk_filterContentAjax=function(inst){
 			img+='<div class="wpk_fb_icon" style="background:url(<?php echo plugins_url('lib/timthumb.php',dirname(__FILE__)); ?>?src='+v.url+'&w=50&h=50&q=80&zc=1) no-repeat center center"></div>';
 			img+='<input class="wpk_fb_icon_checkbox" id="wpk_fb_image_'+k+'" name="wpk_fb_image[]" type="checkbox" value="'+v.url+'::'+v.title+'"/><label for="wpk_fb_image_'+k+'">'+v.title;
 			if(v.fb_id!=''){
-				img+='( Image already uploaded );
+				img+='( Image already uploaded )';
 			}
 			img+='</label>';
 			img+='</li>';
