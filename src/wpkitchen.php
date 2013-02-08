@@ -83,7 +83,7 @@ class WP_Kitchen{
 			require WPK_ROOT_DIR.'wpkitchen-metabox.php';
 			$metabox=new WP_Kitchen_Metabox();
 			add_action('add_meta_boxes',array(&$this,'_loadMetabox'));
-			add_action('save_post',array(&$metabox,'saveMetaData'));
+			add_action('save_post',array(&$metabox,'saveMetaData'),1,2);
 		}
 	}
 	
@@ -110,6 +110,7 @@ class WP_Kitchen{
 		wp_enqueue_script('jquery');
 		wp_enqueue_script('jquery-ui-core');
 		wp_enqueue_script('jquery-ui-dialog');
+		wp_enqueue_script('wpkitchen-utils',plugins_url('js/wpkitchen-utils.js',dirname(__FILE__)));
 		wp_enqueue_style('wp-jquery-ui-dialog');
 		wp_register_style('wpkitchen-stylesheet',plugins_url('css/wpkitchen-fb-album.css',dirname(__FILE__)));
 		wp_enqueue_style('wpkitchen-stylesheet');

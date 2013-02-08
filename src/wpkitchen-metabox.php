@@ -14,7 +14,7 @@ class WP_Kitchen_Metabox{
 	 * 
 	 * @param integer $postId
 	 */
-	public function saveMetaData($postId){
+	public function saveMetaData($postId,$post){
 		if(defined('DOING_AUTOSAVE')&&DOING_AUTOSAVE) return;
 		if(!wp_is_post_revision($postId)){
 			if(!isset($_POST['wpk_fb_album_add'])||intval($_POST['wpk_fb_album_add'])!=1) return;
