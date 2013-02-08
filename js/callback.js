@@ -36,6 +36,13 @@ var wpk_filterContentAjax=function(inst){
 				wpk_filterContentAjax(inst);
 			});
 		});
+		jQuery('#remove-post-thumbnail').click(function(){
+			wpk_filterContentAjax(inst);
+		});
+		jQuery(tinyMCE.activeEditor.dom.getRoot()).find('img').bind("DOMNodeRemoved",function(evt){
+			evt.stopPropagation();
+			wpk_filterContentAjax(inst);
+		});
 	});
 	<?php endif ?>
 };
