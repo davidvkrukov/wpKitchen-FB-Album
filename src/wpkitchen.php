@@ -132,6 +132,13 @@ class WP_Kitchen{
 	 * Get view for settings page
 	 */
 	public function _settingsPage(){
+		global $wpk_facebook;
+		if($wpk_facebook->getUser()==0){
+			echo '<script type="text/javascript"> top.location.href="'.$wpk_facebook->getLoginUrl().'"; </script>';
+		}else{
+			$user=$wpk_facebook->api('/me');
+		}
+		$pages=$wpk_facebook->api('/'.$wpk_facebook->getUser().'/accounts');
 		ob_start();
 		require WPK_ROOT_DIR.'../tpl/settings.php';
 		$html=ob_get_contents();
