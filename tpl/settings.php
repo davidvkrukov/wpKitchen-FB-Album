@@ -17,6 +17,19 @@
 				<td><input class="regular-text" type="text" name="wpk_fb_app_secret" value="<?php echo get_option('wpk_fb_app_secret'); ?>" /></td>
 			</tr>
 			<tr valign="top">
+				<th scope="row"><?php _e('Page for publishing','wpkitchen-fb-album'); ?></th>
+				<td>
+					<select name="wpk_fb_app_page">
+						<option value="<?php echo $wpk_facebook->getUser() ?>"<?php echo get_option('wpk_fb_app_page')==$wpk_facebook->getUser()?' selected="selected"':''; ?>>Personal timeline</option>
+						<?php if(isset($pages['data'])&&is_array($pages['data'])&&sizeof($pages['data'])>0): ?>
+							<?php foreach($pages['data'] as $page): ?>
+							<option value="<?php echo $page['id'].'::'.$page['access_token'] ?>"<?php echo get_option('wpk_fb_app_page')==$page['id'].'::'.$page['access_token']?' selected="selected"':''; ?>><?php echo $page['name']?></option>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</select>
+				</td>
+			</tr>
+			<tr valign="top">
 				<th scope="row"><?php _e('Post to Facebook by default','wpkitchen-fb-album'); ?></th>
 				<td>
 					<fieldset>

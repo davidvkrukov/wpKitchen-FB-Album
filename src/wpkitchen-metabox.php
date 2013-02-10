@@ -58,8 +58,14 @@ class WP_Kitchen_Metabox{
 	 */
 	protected function getAlbumId($name){
 		global $wpk_facebook;
-		$user_id=$wpk_facebook->getUser();
-		$access_token=$wpk_facebook->getAccessToken();
+		if(get_option('wpk_fb_app_page',false)!==false){
+			$data=explode('::',get_option('wpk_fb_app_page'));
+			$user_id=$data[0];
+			$access_token=isset($data[1])?$data[1]:$wpk_facebook->getAccessToken();
+		}else{
+			$user_id=$wpk_facebook->getUser();
+			$access_token=$wpk_facebook->getAccessToken();
+		}
 		$response=$wpk_facebook->api('/'.$user_id.'/albums','GET',array('access_token'=>$access_token));
 		if(sizeof($response['data'])>0){
 			foreach($response['data'] as $album){
@@ -97,8 +103,16 @@ class WP_Kitchen_Metabox{
 			$count++;
 		}
 		$params['batch']='['.implode(',',$batch).']';
-		$params['access_token']=$wpk_facebook->getAccessToken();
-		$response=$wpk_facebook->api('/','post',$params);
+		if(get_option('wpk_fb_app_page',false)!==false){
+			$data=explode('::',get_option('wpk_fb_app_page'));
+			$user_id=$data[0];
+			$access_token=isset($data[1])?$data[1]:$wpk_facebook->getAccessToken();
+		}else{
+			$user_id=$wpk_facebook->getUser();
+			$access_token=$wpk_facebook->getAccessToken();
+		}
+		$params['access_token']=$access_token;
+		$response=$wpk_facebook->api('/'.$user_id,'post',$params);
 		return $response;
 	}
 }
