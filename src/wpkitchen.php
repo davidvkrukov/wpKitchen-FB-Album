@@ -203,7 +203,7 @@ class WP_Kitchen{
 	 * Parse post content for galleries, load images related to current post/page etc
 	 */
 	public function _filterContentAction(){
-		if(isset($_POST['content'])&&isset($_POST['img'])){
+		if(isset($_POST['content'])){
 			$content=stripcslashes($_POST['content']);
 			$post_id=intval($_POST['post_id']);
 			$tmp=array();
@@ -213,7 +213,7 @@ class WP_Kitchen{
 				$tmp[]=array(
 					'url'=>$image_url[0],
 					'fb_id'=>'',
-					'title'=>''
+					'title'=>get_post_meta($image_id,'_wp_attachment_image_alt',true)
 				);
 			}
 			preg_match('/gallery ids="([^\s]+)""/i',htmlspecialchars_decode($content),$gallery);
@@ -224,17 +224,19 @@ class WP_Kitchen{
 					$tmp[]=array(
 						'url'=>$url,
 						'fb_id'=>'',
-						'title'=>''
+						'title'=>get_post_meta($image_id,'_wp_attachment_image_alt',true)
 					);
 				}
 			}
 			$images=array();
-			foreach($_POST['img'] as $img){
-				$tmp[]=array(
-					'url'=>$img['src'],
-					'fb_id'=>'',
-					'title'=>$img['caption']
-				);
+			if(isset($_POST['img'])){
+				foreach($_POST['img'] as $img){
+					$tmp[]=array(
+						'url'=>$img['src'],
+						'fb_id'=>'',
+						'title'=>$img['caption']
+					);
+				}
 			}
 			$meta=get_post_meta($post_id,'wpk_fb_album_meta',array());
 			foreach($tmp as $image){
