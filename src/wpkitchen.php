@@ -219,13 +219,24 @@ class WP_Kitchen{
 			preg_match('/gallery ids="([^\s]+)""/i',htmlspecialchars_decode($content),$gallery);
 			if(isset($gallery[1])){
 				$_tmp=explode(',',$gallery[1]);
-				foreach($_tmp as $id){
-					$url=wp_get_attachment_url($id);
-					$tmp[]=array(
-						'url'=>$url,
-						'fb_id'=>'',
-						'title'=>get_post_meta($id,'_wp_attachment_image_alt',true)
-					);
+				$attachments=get_posts(array(
+					'post_type'=>'attachment',
+					'numberposts'=>-1,
+					'post_status'=>'any',
+					'post_parent'=>$post_id,
+					'orderby'=>'menu_order',
+					'order'=>'ASC',
+				));
+				if($attachments){
+					foreach($attachments as $attachment){
+						if(in_array($attachment->ID,$_tmp)){
+							$tmp[]=array(
+								'url'=>wp_get_attachment_url($attachment->ID),
+								'fb_id'=>'',
+								'title'=>apply_filters('the_title',$attachment->post_title)
+							);
+						}
+					}
 				}
 			}
 			$images=array();
