@@ -224,7 +224,7 @@ class WP_Kitchen{
 					$tmp[]=array(
 						'url'=>$url,
 						'fb_id'=>'',
-						'title'=>get_post_meta($image_id,'_wp_attachment_image_alt',true)
+						'title'=>get_post_meta($id,'_wp_attachment_image_alt',true)
 					);
 				}
 			}
