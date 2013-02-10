@@ -147,13 +147,6 @@ class WP_Kitchen{
 		$appSecret=get_option('wpk_fb_app_secret',null);
 		if(!is_null($appId)&&!is_null($appSecret)){
 			global $wpk_facebook;
-			require WPK_ROOT_DIR.'../lib/facebook.php';
-			$wpk_facebook=new Facebook(array(
-				'appId'=>$appId,
-				'secret'=>$appSecret,
-				'cookie'=>false,
-				'scope'=>'user_photos,email,publish_stream,user_birthday,user_location,user_work_history,user_about_me,user_hometown'
-			));
 			$options=get_option('wpk_fb_use_type',array());
 			foreach(get_post_types(array('public'=>true,'_builtin'=>true),'objects') as $post_type){
 				if(isset($options[$post_type->name])){
