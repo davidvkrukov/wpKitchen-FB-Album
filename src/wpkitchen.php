@@ -101,6 +101,7 @@ class WP_Kitchen{
 		register_setting('wpkfb-settings-group','wpk_fb_post_by_default');
 		register_setting('wpkfb-settings-group','wpk_fb_album_template');
 		register_setting('wpkfb-settings-group','wpk_fb_use_type');
+		register_setting('wpkfb-settings-group','wpk_fb_app_page');
 	}
 	
 	/**
