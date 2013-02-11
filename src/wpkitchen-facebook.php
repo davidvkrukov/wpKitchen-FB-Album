@@ -98,6 +98,36 @@ class WP_Kitchen_Facebook extends BaseFacebook{
 		}
 	}
 	
+	protected function getCode(){
+		if(isset($_REQUEST['code'])){
+			if($this->state!==null&&isset($_REQUEST['wpk_state'])&&$this->state===$_REQUEST['wpk_state']) {
+				$this->state=null;
+				$this->clearPersistentData('state');
+				return $_REQUEST['code'];
+			}else{
+				self::errorLog('CSRF state token does not match one provided.');
+				return false;
+			}
+		}
+		return false;
+	}
+	
+	public function getLoginUrl($params=array()){
+		$this->establishCSRFTokenState();
+		$currentUrl=$this->getCurrentUrl();
+		$scopeParams=isset($params['scope'])?$params['scope']:null;
+		if($scopeParams&&is_array($scopeParams)){
+			$params['scope']=implode(',',$scopeParams);
+		}
+		return $this->getUrl(
+			'www','dialog/oauth',
+			array_merge(array(
+				'client_id'=>$this->getAppId(),
+				'redirect_uri'=>$currentUrl,
+				'wpk_state'=>$this->state
+			),$params));
+	}
+
 	protected function deleteSharedSessionCookie(){
 		$cookie_name=$this->getSharedSessionCookieName();
 		unset($_COOKIE[$cookie_name]);
