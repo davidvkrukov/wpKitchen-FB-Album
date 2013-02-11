@@ -32,4 +32,9 @@
 	padding:2px;
 	box-shadow:2px 2px 10px rgba(10,10,10,0.2);
 	color:#fff;
+	overflow:hidden;
+}
+
+.wpk_fb_icon img {
+	position:absolute;
 }

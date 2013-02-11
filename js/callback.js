@@ -1,5 +1,5 @@
 var timthumbPath='<?php echo plugins_url('lib/timthumb.php',dirname(__FILE__)); ?>';
-var wpk_filterContentAjax=function(inst){
+var wpk_filterContentAjax=function(inst,updated){
 	<?php global $post; ?>
 	<?php if(is_object($post)): ?>
 	var arr=new Array();
@@ -9,20 +9,20 @@ var wpk_filterContentAjax=function(inst){
 			src:img.attr("src"),
 			caption:jQuery.trim(img.attr("alt"))
 		});
-		jQuery(this).bind('destroyed',function(){filterContentAjax(inst);});
 	});
+	var content=(updated==false)?inst.getBody().innerHTML:updated;
 	var data={
 		action:'content_filter_action',
 		img:arr,
 		content:inst.getBody().innerHTML,
-		post_id:<?php global $post; echo $post->ID; ?>
+		post_id:<?php echo $post->ID; ?>
 	};
 	jQuery.post(ajaxurl,data,function(response){
 		var img='<ul>';
 		jQuery.each(response,function(k,v){
 			img+='<li class="wpk_fb_icon_row">';
-			img+='<div class="wpk_fb_icon" style="background:url('+timthumbPath+'?src='+v.url+'&w=50&h=50&q=80&zc=1) no-repeat center center"></div>';
-			img+='<input class="wpk_fb_icon_checkbox" id="wpk_fb_image_'+k+'" name="wpk_fb_image[]" type="checkbox" value="'+v.url+'::'+v.title+'"/><label for="wpk_fb_image_'+k+'">'+v.title;
+			img+='<div class="wpk_fb_icon"><img src="'+v.url+'" onload="wpk_buildIcon(event)"/></div>';
+			img+='<input id="wpk_fb_image_'+k+'" name="wpk_fb_image[]" type="checkbox" value="'+v.url+'::'+v.title+'"/><label for="wpk_fb_image_'+k+'">'+v.title;
 			if(v.fb_id!=''){
 				img+=' ( <a href="http://www.facebook.com/photo.php?fbid='+v.fb_id+'">Image already uploaded</a> )';
 			}
@@ -33,15 +33,11 @@ var wpk_filterContentAjax=function(inst){
 		jQuery('#wpk_metabox_container').html(jQuery(img));
 		jQuery('#titlewrap input[type=text]').unbind('click').bind('click',function(){
 			jQuery(this).blur(function(evt){
-				wpk_filterContentAjax(inst);
+				wpk_filterContentAjax(inst,false);
 			});
 		});
 		jQuery('#remove-post-thumbnail').click(function(){
-			wpk_filterContentAjax(inst);
-		});
-		jQuery(tinyMCE.activeEditor.dom.getRoot()).find('img').bind("DOMNodeRemoved",function(evt){
-			evt.stopPropagation();
-			wpk_filterContentAjax(inst);
+			wpk_filterContentAjax(inst,false);
 		});
 	});
 	<?php endif ?>
@@ -49,6 +45,24 @@ var wpk_filterContentAjax=function(inst){
 
 var wpk_checkForImage=function(editor_id,node,undo_index,undo_levels,visual_aid,any_selection){
 	if(node.nodeName=='IMG'){
-		wpk_filterContentAjax(tinyMCE.activeEditor);
+		var editor=tinyMCE.getInstanceById(editor_id);
+		wpk_filterContentAjax(editor,editor.dom.getRoot());
+	}
+};
+
+var wpk_commandObserver=function(editor_id,elm,command,user_interface,value){
+	if(command=='mceInsertContent'){
+		var arr=new Array();
+		jQuery(value).find('img').each(function(k,item){
+			var html='<li class="wpk_fb_icon_row" id="wpk_featured">';
+			html+='<div class="wpk_fb_icon"><img src="'+jQuery(this).attr('src')+'" onload="wpk_buildIcon(event)"/></div>';
+			html+='<input class="wpk_fb_icon_checkbox" id="wpk_fb_image_'+k+'" name="wpk_fb_image[]" type="checkbox" value="'+jQuery(this).attr('src')+'::'+jQuery(this).attr('alt')+'"/><label for="wpk_fb_image_'+k+'">'+jQuery(this).attr('alt');
+			html+='</label>';
+			html+='</li>';
+			jQuery('#wpk_metabox_container ul').append(html);
+		});
+	}else{
+		var editor=tinyMCE.getInstanceById(editor_id);
+		wpk_filterContentAjax(editor,editor.dom.getRoot());
 	}
 };

@@ -84,6 +84,7 @@ class WP_Kitchen{
 			$metabox=new WP_Kitchen_Metabox();
 			add_action('add_meta_boxes',array(&$this,'_loadMetabox'));
 			add_action('save_post',array(&$metabox,'saveMetaData'),1,2);
+			//add_action('pre_post_update',array(&$metabox,'saveDraftMetaData'),1);
 		}
 	}
 	
@@ -187,7 +188,7 @@ class WP_Kitchen{
 		ob_clean();
 		echo $html;
 	}
-
+	
 	/**
 	 * Add script to doing AJAX calls when editor content changed
 	 */
@@ -196,7 +197,7 @@ class WP_Kitchen{
 		require_once WPK_ROOT_DIR.'../js/callback.js';
 		$js=ob_get_contents();
 		ob_clean();
-		echo '<script type="text/javascript" >'.$js.'</script>';
+		echo '<script type="text/javascript">'.$js.'</script>';
 	}
 	
 	/**
@@ -275,8 +276,8 @@ class WP_Kitchen{
 	 */
 	public function _filterContent($init){
 		$init['init_instance_callback']='[wpk_filterContentAjax][0]';
-		// $init['onchange_callback']='[wpk_filterContentAjax][0]';
-		$init['handle_node_change_callback']='[wpk_checkForImage][0]'; 
+		$init['execcommand_callback']='[wpk_commandObserver][0]';
+		//$init['handle_node_change_callback']='[wpk_checkForImage][0]'; 
 		return $init;
 	}
 	
