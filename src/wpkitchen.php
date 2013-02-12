@@ -127,7 +127,24 @@ class WP_Kitchen{
 	}
 	
 	public function _saveSettings(){
-		// TODO
+		global $wpk_facebook;
+		$appId=get_option('wpk_fb_app_id',null);
+		$appSecret=get_option('wpk_fb_app_secret',null);
+		if(!is_null($appId)&&!is_null($appSecret)){
+			require WPK_ROOT_DIR.'../lib/facebook.php';
+			$wpk_facebook=new Facebook(array(
+				'appId'=>$appId,
+				'secret'=>$appSecret,
+				'cookie'=>false,
+				'fileUpload'=>true,
+				'scope'=>'user_photos,email,publish_stream,user_birthday,user_location,user_work_history,user_about_me,user_hometown'
+			));
+			if($wpk_facebook->getUser()==0){
+				echo '<script type="text/javascript"> top.location.href="'.$wpk_facebook->getLoginUrl().'"; </script>';
+			}else{
+				$user=$wpk_facebook->api('/me');
+			}
+		}
 	}
 	
 	/**
@@ -135,12 +152,16 @@ class WP_Kitchen{
 	 */
 	public function _settingsPage(){
 		global $wpk_facebook;
-		if($wpk_facebook->getUser()==0){
-			echo '<script type="text/javascript"> top.location.href="'.$wpk_facebook->getLoginUrl().'"; </script>';
-		}else{
-			$user=$wpk_facebook->api('/me');
+		$appId=get_option('wpk_fb_app_id',null);
+		$appSecret=get_option('wpk_fb_app_secret',null);
+		if(!is_null($appId)&&!is_null($appSecret)){
+			if($wpk_facebook->getUser()==0){
+				echo '<script type="text/javascript"> top.location.href="'.$wpk_facebook->getLoginUrl().'"; </script>';
+			}else{
+				$user=$wpk_facebook->api('/me');
+			}
+			$pages=$wpk_facebook->api('/'.$wpk_facebook->getUser().'/accounts');
 		}
-		$pages=$wpk_facebook->api('/'.$wpk_facebook->getUser().'/accounts');
 		ob_start();
 		require WPK_ROOT_DIR.'../tpl/settings.php';
 		$html=ob_get_contents();

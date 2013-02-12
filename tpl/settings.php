@@ -17,6 +17,7 @@
 				<td><input class="regular-text" type="text" name="wpk_fb_app_secret" value="<?php echo get_option('wpk_fb_app_secret'); ?>" /></td>
 			</tr>
 			<tr valign="top">
+				<?php if(!is_null($appId)&&!is_null($appSecret)): ?>
 				<th scope="row"><?php _e('Page for publishing','wpkitchen-fb-album'); ?></th>
 				<td>
 					<select name="wpk_fb_app_page">
@@ -28,7 +29,11 @@
 						<?php endif; ?>
 					</select>
 				</td>
+				<?php else: ?>
+				<th scope="row" colspan="2"><strong><?php _e('You must set "Application ID" and "Secret" to start using the plugin.','wpkitchen-fb-album'); ?></strong></th>
+				<?php endif; ?>
 			</tr>
+			<?php if(!is_null($appId)&&!is_null($appSecret)): ?>
 			<tr valign="top">
 				<th scope="row"><?php _e('Post to Facebook by default','wpkitchen-fb-album'); ?></th>
 				<td>
@@ -66,6 +71,7 @@
 					<p class="description"><?php _e('%year% %month% %month-name% %week% %day% %day-name% %post-title%','wpkitchen-fb-album'); ?></p>
 				</td>
 			</tr>
+			<?php endif; ?>
 		</table>
 		<?php submit_button(); ?>
 	</form>
