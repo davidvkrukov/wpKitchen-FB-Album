@@ -208,13 +208,14 @@ class WP_Kitchen{
 			$content=stripcslashes($_POST['content']);
 			$post_id=intval($_POST['post_id']);
 			$tmp=array();
+			$attachment_image_id=-1;
 			if(has_post_thumbnail($post_id)){
-				$image_id=get_post_thumbnail_id($post_id);
-				$image_url=wp_get_attachment_image_src($image_id,'full');
+				$attachment_image_id=get_post_thumbnail_id($post_id);
+				$image_url=wp_get_attachment_image_src($attachment_image_id,'full');
 				$tmp[]=array(
 					'url'=>$image_url[0],
 					'fb_id'=>'',
-					'title'=>get_post_meta($image_id,'_wp_attachment_image_alt',true)
+					'title'=>get_post_meta($attachment_image_id,'_wp_attachment_image_alt',true)
 				);
 			}
 			preg_match('/gallery ids="([^\s]+)""/i',htmlspecialchars_decode($content),$gallery);
@@ -230,7 +231,7 @@ class WP_Kitchen{
 				));
 				if($attachments){
 					foreach($attachments as $attachment){
-						if(in_array($attachment->ID,$_tmp)){
+						if(in_array($attachment->ID,$_tmp)&&$attachment->ID!=$attachment_image_id){
 							$tmp[]=array(
 								'url'=>wp_get_attachment_url($attachment->ID),
 								'fb_id'=>'',
