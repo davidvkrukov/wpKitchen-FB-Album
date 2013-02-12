@@ -7,6 +7,8 @@
 
 if(!class_exists('WP_Kitchen')):
 
+require_once WPK_ROOT_DIR.'wpkitchen-facebook.php';
+
 class WP_Kitchen{
 	/**
 	 * @var WP_Kitchen
@@ -67,24 +69,28 @@ class WP_Kitchen{
 		$appId=get_option('wpk_fb_app_id',null);
 		$appSecret=get_option('wpk_fb_app_secret',null);
 		if(!is_null($appId)&&!is_null($appSecret)){
-			require WPK_ROOT_DIR.'../lib/facebook.php';
-			$wpk_facebook=new Facebook(array(
+			$wpk_facebook=new WP_Kitchen_Facebook(array(
 				'appId'=>$appId,
 				'secret'=>$appSecret,
 				'cookie'=>false,
 				'fileUpload'=>true,
 				'scope'=>'user_photos,email,publish_stream,user_birthday,user_location,user_work_history,user_about_me,user_hometown'
 			));
-			if($wpk_facebook->getUser()==0){
-				echo '<script type="text/javascript"> top.location.href="'.$wpk_facebook->getLoginUrl().'"; </script>';
-			}else{
-				$user=$wpk_facebook->api('/me');
+			try{
+				if($this->_checkForFB($appId,$appSecret)){
+					if($wpk_facebook->getUser()==0){
+						echo '<script type="text/javascript"> top.location.href="'.$wpk_facebook->getLoginUrl().'"; </script>';
+					}else{
+						$user=$wpk_facebook->api('/me');
+					}
+					require WPK_ROOT_DIR.'wpkitchen-metabox.php';
+					$metabox=new WP_Kitchen_Metabox();
+					add_action('add_meta_boxes',array(&$this,'_loadMetabox'));
+					add_action('save_post',array(&$metabox,'saveMetaData'),1,2);
+				}
+			}catch(Exception $e){
+				// TODO
 			}
-			require WPK_ROOT_DIR.'wpkitchen-metabox.php';
-			$metabox=new WP_Kitchen_Metabox();
-			add_action('add_meta_boxes',array(&$this,'_loadMetabox'));
-			add_action('save_post',array(&$metabox,'saveMetaData'),1,2);
-			//add_action('pre_post_update',array(&$metabox,'saveDraftMetaData'),1);
 		}
 	}
 	
@@ -127,22 +133,11 @@ class WP_Kitchen{
 	}
 	
 	public function _saveSettings(){
-		global $wpk_facebook;
-		$appId=get_option('wpk_fb_app_id',null);
-		$appSecret=get_option('wpk_fb_app_secret',null);
-		if(!is_null($appId)&&!is_null($appSecret)){
-			require WPK_ROOT_DIR.'wpkitchen-facebook.php';
-			$wpk_facebook=new WP_Kitchen_Facebook(array(
-				'appId'=>$appId,
-				'secret'=>$appSecret,
-				'cookie'=>false,
-				'fileUpload'=>true,
-				'scope'=>'user_photos,email,publish_stream,user_birthday,user_location,user_work_history,user_about_me,user_hometown'
-			));
-			if($wpk_facebook->getUser()==0){
-				echo '<script type="text/javascript"> top.location.href="'.$wpk_facebook->getLoginUrl().'"; </script>';
+		if(isset($_POST['wpk_fb_app_id'])){
+			if($this->_checkForFB($this->_checkForFB($_POST['wpk_fb_app_id'],$_POST['wpk_fb_app_secret']))){
+				echo "OK";
 			}else{
-				$user=$wpk_facebook->api('/me');
+				echo "Application not exists";
 			}
 		}
 	}
@@ -154,13 +149,18 @@ class WP_Kitchen{
 		global $wpk_facebook;
 		$appId=get_option('wpk_fb_app_id',null);
 		$appSecret=get_option('wpk_fb_app_secret',null);
-		if(!is_null($appId)&&!is_null($appSecret)){
-			if($wpk_facebook->getUser()==0){
-				echo '<script type="text/javascript"> top.location.href="'.$wpk_facebook->getLoginUrl().'"; </script>';
-			}else{
-				$user=$wpk_facebook->api('/me');
+		try{
+			$this->_checkForFB($appId,$appSecret);
+			if(!is_null($appId)&&!is_null($appSecret)){
+				if($wpk_facebook->getUser()==0){
+					echo '<script type="text/javascript"> top.location.href="'.$wpk_facebook->getLoginUrl().'"; </script>';
+				}else{
+					$user=$wpk_facebook->api('/me');
+				}
+				$pages=$wpk_facebook->api('/'.$wpk_facebook->getUser().'/accounts');
 			}
-			$pages=$wpk_facebook->api('/'.$wpk_facebook->getUser().'/accounts');
+		}catch(Exception $e){
+			$error=$e->getMessage();
 		}
 		ob_start();
 		require WPK_ROOT_DIR.'../tpl/settings.php';
@@ -288,7 +288,26 @@ class WP_Kitchen{
 		}
 		die();
 	}
-
+	
+	/**
+	 * Check for FB application with given id exists
+	 * 
+	 * @param integer $appId
+	 * @return boolean
+	 */
+	protected function _checkForFB($appId,$appSecret){
+		global $wpk_facebook;
+		$wpk_facebook=new WP_Kitchen_Facebook(array(
+			'appId'=>$appId,
+			'secret'=>$appSecret,
+			'cookie'=>false,
+			'fileUpload'=>true,
+			'scope'=>'user_photos,email,publish_stream,user_birthday,user_location,user_work_history,user_about_me,user_hometown'
+		));
+		//var_dump($wpk_facebook->api($appId));
+		return $wpk_facebook->api($appId);
+	}
+	
 	/**
 	 * Add callbacks to tinyMCE
 	 * ('filterContentAjax' function loaded by self::_filterContentScript method)
