@@ -1,17 +1,18 @@
-var timthumbPath='<?php echo plugins_url('lib/timthumb.php',dirname(__FILE__)); ?>';
-var wpk_filterContentAjax=function(inst,updated){
+var updated=false;
+var wpk_filterContentAjax=function(inst){
 	<?php global $post; ?>
 	<?php if(is_object($post)): ?>
 	var arr=new Array();
-	jQuery(tinyMCE.activeEditor.dom.getRoot()).find('img').each(function(){
+	jQuery(inst.dom.getRoot()).find('img').each(function(){
 		var img=jQuery(this);
-		var _title=(img.attr("title").length>0&&jQuery.trim(img.attr("title"))!='')?jQuery.trim(img.attr("title")):jQuery.trim(img.attr("alt"));
+		var _title='';//(img.attr("title").length>0&&jQuery.trim(img.attr("title"))!='')?jQuery.trim(img.attr("title")):jQuery.trim(img.attr("alt"));
 		arr.push({
-			src:img.attr("src"),
+			src:jQuery(img).attr("src"),
 			caption:_title
 		});
 	});
 	var content=(updated==false)?inst.getBody().innerHTML:updated;
+	updated=false;
 	var data={
 		action:'content_filter_action',
 		img:arr,
@@ -47,7 +48,8 @@ var wpk_filterContentAjax=function(inst,updated){
 var wpk_checkForImage=function(editor_id,node,undo_index,undo_levels,visual_aid,any_selection){
 	if(node.nodeName=='IMG'){
 		var editor=tinyMCE.getInstanceById(editor_id);
-		wpk_filterContentAjax(editor,editor.dom.getRoot());
+		updated=editor.dom.getRoot();
+		wpk_filterContentAjax(editor);
 	}
 };
 
@@ -64,6 +66,7 @@ var wpk_commandObserver=function(editor_id,elm,command,user_interface,value){
 		});
 	}else{
 		var editor=tinyMCE.getInstanceById(editor_id);
-		wpk_filterContentAjax(editor,editor.dom.getRoot());
+		updated=editor.dom.getRoot();
+		wpk_filterContentAjax(editor);
 	}
 };
