@@ -5,9 +5,10 @@ var wpk_filterContentAjax=function(inst,updated){
 	var arr=new Array();
 	jQuery(tinyMCE.activeEditor.dom.getRoot()).find('img').each(function(){
 		var img=jQuery(this);
+		var _title=(img.attr("title").length>0&&jQuery.trim(img.attr("title"))!='')?jQuery.trim(img.attr("title")):jQuery.trim(img.attr("alt"));
 		arr.push({
 			src:img.attr("src"),
-			caption:jQuery.trim(img.attr("alt"))
+			caption:_title
 		});
 	});
 	var content=(updated==false)?inst.getBody().innerHTML:updated;
