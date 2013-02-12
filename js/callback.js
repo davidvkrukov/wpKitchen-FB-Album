@@ -5,7 +5,7 @@ var wpk_filterContentAjax=function(inst){
 	var arr=new Array();
 	jQuery(inst.dom.getRoot()).find('img').each(function(){
 		var img=jQuery(this);
-		var _title='';//(img.attr("title").length>0&&jQuery.trim(img.attr("title"))!='')?jQuery.trim(img.attr("title")):jQuery.trim(img.attr("alt"));
+		var _title=(jQuery(img).attr("title")&&jQuery.trim(jQuery(img).attr("title"))!='')?jQuery.trim(jQuery(img).attr("title")):jQuery.trim(jQuery(img).attr("alt"));
 		arr.push({
 			src:jQuery(img).attr("src"),
 			caption:_title

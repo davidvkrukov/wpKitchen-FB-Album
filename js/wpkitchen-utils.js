@@ -43,8 +43,8 @@ var wpk_scale=function(srcwidth,srcheight,targetwidth,targetheight,fLetterBox){
 
 jQuery(document).ready(function($){
 	$(document).data('current_post_thumbnail',null);
-	$('#postimagediv .inside').bind("DOMSubtreeModified",function(evt){
-		evt.stopPropagation();
+	$('#postimagediv .inside').bind('DOMNodeInserted',function(evt){
+		//evt.stopPropagation();
 		try{
 			var featured=$(this).find('img.attachment-post-thumbnail');
 			if($(document).data('current_post_thumbnail')!=$(featured).attr('src')){
@@ -59,7 +59,7 @@ jQuery(document).ready(function($){
 						$('#wpk_metabox_container ul li#wpk_featured').html(html);
 					}else{
 						html='<li class="wpk_fb_icon_row" id="wpk_featured">'+html+'</li>';
-						$('#wpk_metabox_container ul').append(img);
+						$('#wpk_metabox_container ul').append(html);
 					}
 				}
 			}
