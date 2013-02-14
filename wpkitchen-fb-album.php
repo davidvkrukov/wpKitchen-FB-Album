@@ -7,7 +7,7 @@ Version: 1.0
 Author: wpKitchen, David V. Krukov
 Author URI:
 Text Domain: wpkitchen
-License: GPL2
+License: GPLv2 or later
 */
 
 // Exit if accessed directly
