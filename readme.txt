@@ -1,5 +1,5 @@
 === Plugin Name ===
-Contributors: david_v_krukov
+Contributors: mikkelbreum, david_v_krukov
 Donate link: 
 Tags: facebook, albums
 Requires at least: 3.0.1
