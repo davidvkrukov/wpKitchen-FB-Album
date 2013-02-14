@@ -4,10 +4,9 @@ Plugin Name: wpKitchen FB Album
 Plugin URI:
 Description: Post photos to albums on Facebook using graph API
 Version: 1.0
-Author: wpKitchen
+Author: wpKitchen, David V. Krukov
 Author URI:
 Text Domain: wpkitchen
-Domain Path: /lang/
 License: GPL2
 */
 
