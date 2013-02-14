@@ -11,12 +11,12 @@ var wpk_filterContentAjax=function(inst){
 			caption:_title
 		});
 	});
-	var content=(updated==false)?inst.getBody().innerHTML:updated;
+	var _content=(updated==false)?inst.getBody().innerHTML:updated;
 	updated=false;
 	var data={
 		action:'content_filter_action',
 		img:arr,
-		content:inst.getBody().innerHTML,
+		content:_content,
 		post_id:<?php echo $post->ID; ?>
 	};
 	jQuery.post(ajaxurl,data,function(response){
@@ -35,11 +35,11 @@ var wpk_filterContentAjax=function(inst){
 		jQuery('#wpk_metabox_container').html(jQuery(img));
 		jQuery('#titlewrap input[type=text]').unbind('click').bind('click',function(){
 			jQuery(this).blur(function(evt){
-				wpk_filterContentAjax(inst,false);
+				wpk_filterContentAjax(inst);
 			});
 		});
 		jQuery('#remove-post-thumbnail').click(function(){
-			wpk_filterContentAjax(inst,false);
+			wpk_filterContentAjax(inst);
 		});
 	});
 	<?php endif ?>
