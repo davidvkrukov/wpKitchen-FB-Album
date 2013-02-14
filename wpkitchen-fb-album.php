@@ -6,7 +6,6 @@ Description: Post photos to albums on Facebook using graph API
 Version: 1.0
 Author: wpKitchen, David V. Krukov
 Author URI:
-Text Domain: wpkitchen
 License: GPLv2 or later
 */
 
