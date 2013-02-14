@@ -33,7 +33,7 @@ var wpk_filterContentAjax=function(inst){
 		});
 		img+='</ul>'
 		jQuery('#wpk_metabox_container').html(jQuery(img));
-		jQuery('#titlewrap input[type=text]').unbind('click').bind('click',function(){
+		jQuery('#titlewrap input[type=text]').click(function(){
 			jQuery(this).blur(function(evt){
 				wpk_filterContentAjax(inst);
 			});
