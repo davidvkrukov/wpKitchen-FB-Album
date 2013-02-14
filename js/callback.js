@@ -39,6 +39,7 @@ var wpk_filterContentAjax=function(inst){
 			});
 		});
 		jQuery('#remove-post-thumbnail').click(function(){
+			inst.dom.getRoot()).find('li#wpk_featured').remove();
 			wpk_filterContentAjax(inst);
 		});
 	});
@@ -57,7 +58,7 @@ var wpk_commandObserver=function(editor_id,elm,command,user_interface,value){
 	if(command=='mceInsertContent'){
 		var arr=new Array();
 		jQuery(value).find('img').each(function(k,item){
-			var html='<li class="wpk_fb_icon_row" id="wpk_featured">';
+			var html='<li class="wpk_fb_icon_row">';
 			html+='<div class="wpk_fb_icon"><img src="'+jQuery(this).attr('src')+'" onload="wpk_buildIcon(event)"/></div>';
 			html+='<input class="wpk_fb_icon_checkbox" id="wpk_fb_image_'+k+'" name="wpk_fb_image[]" type="checkbox" value="'+jQuery(this).attr('src')+'::'+jQuery(this).attr('alt')+'"/><label for="wpk_fb_image_'+k+'">'+jQuery(this).attr('alt');
 			html+='</label>';
